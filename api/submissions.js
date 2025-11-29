@@ -22,7 +22,7 @@ export default async function handler(req, res) {
   try {
     await client.connect();
     const db = client.db('WebvertizeFormSubmissions');
-    const collection = db.collection('submissions');
+    const collection = db.collection('Webvertize');
 
     const entries = await collection
       .find({}, { projection: { name: 1, email: 1, message: 1, ip: 1 } })
