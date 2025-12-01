@@ -1,4 +1,14 @@
 import { useState } from 'react';
+import Logo from '../components/Logo';
+import styled from 'styled-components';
+
+const StyledLogin = styled.div`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 function Login() {
   const [username, setU] = useState('');
@@ -28,26 +38,38 @@ function Login() {
   }
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Admin Login</h2>
+    <StyledLogin>
+      <Logo />
+      <h2 className="mb-4">Admin Login</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setU(e.target.value)}
-        />
-        <br />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setP(e.target.value)}
-        />
-        <br />
-        <button type="submit">Login</button>
+        <div className="mb-4">
+          <label htmlFor="username" className="form-label">
+            Username
+          </label>
+          <input
+            value={username}
+            onChange={(e) => setU(e.target.value)}
+            className="form-control"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setP(e.target.value)}
+            className="form-control"
+          />
+        </div>
+
+        <button type="submit" className="btn btn-primary w-100">
+          Login
+        </button>
       </form>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-    </div>
+    </StyledLogin>
   );
 }
 
