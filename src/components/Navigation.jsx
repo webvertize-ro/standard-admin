@@ -1,4 +1,5 @@
 import React from 'react';
+import Logo from './Logo';
 
 function Navigation() {
   const handleLogout = () => {
@@ -13,6 +14,7 @@ function Navigation() {
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
+          <Logo />
           Webvertize Admin
         </a>
 
