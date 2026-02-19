@@ -21,8 +21,8 @@ export default async function handler(req, res) {
   // Fetch submissions
   try {
     await client.connect();
-    const db = client.db('WebvertizeFormSubmissions');
-    const collection = db.collection('Webvertize');
+    const db = client.db('PacheteWebvertize');
+    const collection = db.collection('PachetulWebvertizeStandard');
 
     const entries = await collection
       .find(
