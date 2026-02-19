@@ -15,6 +15,8 @@ export default async function handler(req, res) {
   const adminUser = process.env.ADMIN_USERNAME;
   const adminPass = process.env.ADMIN_PASSWORD;
 
+  console.log('adminUser: ', adminUser);
+
   if (username !== adminUser)
     return res.status(401).json({ error: 'Invalid credentials' });
 
