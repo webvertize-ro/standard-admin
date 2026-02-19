@@ -8,6 +8,7 @@ export default async function handler(req, res) {
 
   const { username, password } = req.body;
   console.log('username: ', username);
+  console.log('password: ', password);
 
   if (!username || !password)
     return res.status(400).json({ error: 'Missing credentials' });
@@ -16,6 +17,7 @@ export default async function handler(req, res) {
   const adminPass = process.env.ADMIN_PASSWORD;
 
   console.log('adminUser: ', adminUser);
+  console.log('admin pw: ', adminPass);
 
   if (username !== adminUser)
     return res.status(401).json({ error: 'Invalid credentials' });
