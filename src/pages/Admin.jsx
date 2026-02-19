@@ -72,7 +72,7 @@ export default function Admin() {
             <strong>Email:</strong> {e.email}
           </p>
           <p>
-            <strong>Message:</strong> {e.message}
+            <strong>Message:</strong> {e.project_description}
           </p>
           <p>
             <strong>IP:</strong> {e.ip}
