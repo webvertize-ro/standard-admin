@@ -7,6 +7,21 @@ export default function Admin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
+  // const entries = [
+  //   {
+  //     name: 'Ion Popescu',
+  //     email: 'ion@test.com',
+  //     message: 'Buna ziua!',
+  //     date: '21.02.2026',
+  //   },
+  //   {
+  //     name: 'Vasile Ionescu',
+  //     email: 'vasile@test.com',
+  //     message: 'Buna seara!',
+  //     date: '20.02.2026',
+  //   },
+  // ];
+
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -57,12 +72,21 @@ export default function Admin() {
   return (
     <div>
       <Navigation />
-      <h2>Solicitări trimise</h2>
+      <div className="container">
+        <h2>Solicitări trimise</h2>
 
-      {error && <p>{error}</p>}
-      {entries.map((e) => (
-        <Submission name={e.name} email={e.email} message={e.message} />
-      ))}
+        {error && <p>{error}</p>}
+        <div className="container">
+          {entries.map((e) => (
+            <Submission
+              name={e.name}
+              email={e.email}
+              message={e.message}
+              date={e.date}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

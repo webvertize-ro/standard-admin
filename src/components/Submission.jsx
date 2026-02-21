@@ -1,21 +1,44 @@
-function Submission({ name, email, message }) {
+import styled from 'styled-components';
+
+const StyledSubmission = styled.div`
+  border: 2px solid grey;
+  border-radius: 1rem;
+`;
+
+const StyledUl = styled.ul`
+  border-radius: 1rem;
+`;
+
+function Submission({ name, email, message, date }) {
   return (
-    <div class="card" style="width: 18rem;">
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-          <span>Nume: </span>
+    <StyledSubmission class="card" className="mb-3">
+      <StyledUl className="list-group">
+        <li className="list-group-item">
+          <span>
+            <strong>Nume: </strong>
+          </span>
           <span>{name}</span>
         </li>
         <li class="list-group-item">
-          <span>Email: </span>
+          <span>
+            <strong>Email: </strong>
+          </span>
           <span>{email}</span>
         </li>
         <li class="list-group-item">
-          <span>Mesaj: </span>
+          <span>
+            <strong>Mesaj: </strong>
+          </span>
           <span>{message}</span>
         </li>
-      </ul>
-    </div>
+        <li class="list-group-item">
+          <span>
+            <strong>Dată: </strong>
+          </span>
+          <span>{date}</span>
+        </li>
+      </StyledUl>
+    </StyledSubmission>
   );
 }
 
