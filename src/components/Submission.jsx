@@ -10,6 +10,8 @@ const StyledUl = styled.ul`
 `;
 
 function Submission({ name, email, message, date }) {
+  const formattedDate = new Date(date);
+
   return (
     <StyledSubmission class="card" className="mb-3">
       <StyledUl className="list-group">
@@ -35,7 +37,7 @@ function Submission({ name, email, message, date }) {
           <span>
             <strong>Dată: </strong>
           </span>
-          <span>{date}</span>
+          <span>{formattedDate}</span>
         </li>
       </StyledUl>
     </StyledSubmission>
