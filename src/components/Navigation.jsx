@@ -17,7 +17,7 @@ function Navigation() {
       <div className="container-fluid">
         <Link className="navbar-brand" to="/admin">
           <Logo />
-          Webvertize Admin
+          Standard Admin
         </Link>
 
         <div className="d-flex">
