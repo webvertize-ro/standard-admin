@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import logoImg from '../assets/logo_no_text_simple_final.png';
+import logoImg from '../assets/basic-business-logo.png';
 
 const StyledLogoImg = styled.img`
-  width: 75px;
+  width: 200px;
 `;
 
 const LogoTitle = styled.div`
@@ -27,10 +27,6 @@ function Logo() {
     <div className="d-flex justify-content-center align-items-center gap-1">
       <div>
         <StyledLogoImg src={logoImg} className="img-fluid" />
-      </div>
-      <div className="d-flex justify-content-center align-items-left flex-column">
-        <LogoTitle>Webvertize</LogoTitle>
-        <LogoSubtitle>Web Development & Ads</LogoSubtitle>
       </div>
     </div>
   );
