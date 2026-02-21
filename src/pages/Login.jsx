@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Logo from '../components/Logo';
 import styled from 'styled-components';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const StyledLogin = styled.div`
   height: 100vh;
@@ -18,10 +19,12 @@ function Login() {
   const [username, setU] = useState('');
   const [password, setP] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     const res = await fetch('/api/login', {
       method: 'POST',
@@ -31,6 +34,7 @@ function Login() {
     });
 
     const data = await res.json();
+    setLoading(false);
 
     if (!res.ok) {
       setError(data.error);
@@ -71,6 +75,7 @@ function Login() {
         </div>
 
         <button type="submit" className="btn btn-primary w-100">
+          {loading && <LoadingSpinner />}
           Login
         </button>
       </StyledForm>
