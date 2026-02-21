@@ -82,7 +82,7 @@ export default function Admin() {
               name={e.name}
               email={e.email}
               message={e.message}
-              date={e.date}
+              date={e.createdAt}
             />
           ))}
         </div>

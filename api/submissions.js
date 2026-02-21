@@ -25,7 +25,10 @@ export default async function handler(req, res) {
     const collection = db.collection('PachetulWebvertizeStandard');
 
     const entries = await collection
-      .find({}, { projection: { name: 1, email: 1, message: 1, ip: 1 } })
+      .find(
+        {},
+        { projection: { name: 1, email: 1, message: 1, ip: 1, createdAt: 1 } },
+      )
       .sort({ createdAt: -1 })
       .toArray();
 
