@@ -55,11 +55,11 @@ export default function Admin() {
   }
 
   return (
-    <div style={{ padding: 20 }}>
+    <div>
       <Navigation />
       <h2>Solicitări trimise</h2>
 
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p>{error}</p>}
       {entries.map((e) => (
         <Submission name={e.name} email={e.email} message={e.message} />
       ))}
