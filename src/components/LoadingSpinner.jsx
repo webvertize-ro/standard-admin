@@ -1,9 +1,5 @@
 function LoadingSpinner() {
-  return (
-    <div className="spinner-border spinner-border-sm" role="status">
-      <span className="sr-only">Loading...</span>
-    </div>
-  );
+  return <div className="spinner-border spinner-border-sm" role="status"></div>;
 }
 
 export default LoadingSpinner;
