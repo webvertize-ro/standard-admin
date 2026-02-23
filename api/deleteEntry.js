@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
     console.log('the entries are: ', entries);
 
-    const query = { _id: id };
+    const query = { _id: `ObjectId(${id})` };
     const result = await entries.deleteOne(query);
     console.log('the result is: ', result);
   } catch (error) {}
