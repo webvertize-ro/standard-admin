@@ -37,7 +37,7 @@ function DeleteModalInner({ onCloseModal, id }) {
       const res = await fetch('/api/deleteEntry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: id,
+        body: JSON.stringify({ id }),
       });
     } catch (error) {
       console.error(error);
