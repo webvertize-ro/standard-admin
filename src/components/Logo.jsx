@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import logoImg from '../assets/basic-business-logo.png';
+import logoLightImg from '../assets/basic-business-logo-light.svg';
 
 const StyledLogoImg = styled.img`
   width: 200px;
@@ -26,7 +26,7 @@ function Logo() {
   return (
     <div className="d-flex justify-content-center align-items-center gap-1">
       <div>
-        <StyledLogoImg src={logoImg} className="img-fluid" />
+        <StyledLogoImg src={logoLightImg} className="img-fluid" />
       </div>
     </div>
   );
