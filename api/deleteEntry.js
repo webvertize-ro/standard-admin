@@ -7,9 +7,12 @@ export default async function handler(req, res) {
 
   const { id } = req.body;
 
-  console.log('the received id is: ', id);
+  try {
+    const database = client.db('PacheteWebvertize');
+    const entries = database.collection('PachetulWebvertizeStandard');
 
-  if (id) {
-    return res.status(200).json({ message: 'id successfully received' });
-  }
+    const query = { _id: id };
+    const result = await entries.deleteOne(query);
+    console.log('the result is: ', result);
+  } catch (error) {}
 }
