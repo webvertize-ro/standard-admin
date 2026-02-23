@@ -32,7 +32,16 @@ const StyledP = styled.p`
 `;
 
 function DeleteModalInner({ onCloseModal, id }) {
-  console.log('the id of the entry is: ', id);
+  async function deleteEntry(id) {
+    try {
+      fetch('/api/deleteEntry', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(id),
+      });
+    } catch (error) {}
+  }
+
   return (
     <StyledDeleteModalInner>
       <StyledH5>
@@ -43,7 +52,9 @@ function DeleteModalInner({ onCloseModal, id }) {
         ireversibilă.
       </StyledP>
       <ActionButtons>
-        <StyledButton action="delete">Șterge</StyledButton>
+        <StyledButton action="delete" onClick={() => deleteEntry(id)}>
+          Șterge
+        </StyledButton>
         <StyledButton action="cancel" onClick={() => onCloseModal?.()}>
           Anulează
         </StyledButton>
