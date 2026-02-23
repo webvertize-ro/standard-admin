@@ -11,6 +11,8 @@ export default async function handler(req, res) {
     const database = client.db('PacheteWebvertize');
     const entries = database.collection('PachetulWebvertizeStandard');
 
+    console.log('the entries are: ', entries);
+
     const query = { _id: id };
     const result = await entries.deleteOne(query);
     console.log('the result is: ', result);
