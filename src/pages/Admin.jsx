@@ -93,6 +93,7 @@ export default function Admin() {
         <StyledH2>Solicitări trimise</StyledH2>
         {error && <p>{error}</p>}
         <div className="container">
+          {console.log('database entries: ', entries)}
           {entries.map((e) => (
             <Request
               name={e.name}
