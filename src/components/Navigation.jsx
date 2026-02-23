@@ -3,6 +3,24 @@ import Logo from './Logo';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
+const StyledNav = styled.nav`
+  /* glassmorphism effect */
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+`;
+
+const LogoutButton = styled.button`
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  text-transform: uppercase;
+  background-color: #88304e;
+  color: #fff;
+`;
+
 function Navigation() {
   const handleLogout = () => {
     // Remove token from localStorage
@@ -13,20 +31,19 @@ function Navigation() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
+    <StyledNav className="navbar navbar-expand-lg navbar-light">
+      <div className="container">
         <Link className="navbar-brand" to="/admin">
-          <Logo />
-          Standard Admin
+          <Logo mode="dark" />
         </Link>
 
         <div className="d-flex">
-          <button className="btn btn-outline-danger" onClick={handleLogout}>
+          <LogoutButton className="" onClick={handleLogout}>
             Logout
-          </button>
+          </LogoutButton>
         </div>
       </div>
-    </nav>
+    </StyledNav>
   );
 }
 

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import logoLightImg from '../assets/basic-business-logo-light.svg';
+import logoLight from '../assets/basic-business-logo-light.svg';
+import logoDark from '../assets/basic-business-logo-dark.svg';
 
 const StyledLogoImg = styled.img`
   width: 200px;
@@ -22,11 +23,15 @@ const LogoSubtitle = styled.div`
   margin-left: 7px;
 `;
 
-function Logo() {
+function Logo({ mode }) {
   return (
     <div className="d-flex justify-content-center align-items-center gap-1">
       <div>
-        <StyledLogoImg src={logoLightImg} className="img-fluid" />
+        {mode === 'dark' ? (
+          <StyledLogoImg src={logoDark} className="img-fluid" />
+        ) : (
+          <StyledLogoImg src={logoLight} className="img-fluid" />
+        )}
       </div>
     </div>
   );
