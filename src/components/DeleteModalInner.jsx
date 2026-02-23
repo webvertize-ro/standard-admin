@@ -34,12 +34,14 @@ const StyledP = styled.p`
 function DeleteModalInner({ onCloseModal, id }) {
   async function deleteEntry(id) {
     try {
-      fetch('/api/deleteEntry', {
-        method: 'GET',
+      const res = await fetch('/api/deleteEntry', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(id),
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (

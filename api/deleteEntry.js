@@ -7,5 +7,9 @@ export default async function handler(req, res) {
 
   const { id } = req.body;
 
+  if (id) {
+    return res.status(200).json({ message: 'id successfully received' });
+  }
+
   console.log('the received id is: ', id);
 }
