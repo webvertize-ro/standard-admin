@@ -45,7 +45,7 @@ const StyledButton = styled.button`
   background-color: #88304e;
 `;
 
-function Request({ name, email, message, date }) {
+function Request({ name, email, message, date, id }) {
   // const formattedDate = new Intl.DateTimeFormat('ro-RO', {
   //   timeZone: 'Europe/Bucharest',
   //   year: 'numeric',
@@ -94,7 +94,7 @@ function Request({ name, email, message, date }) {
             title="Confirmare acțiune"
             size="small"
           >
-            <DeleteModalInner />
+            <DeleteModalInner id={id} />
           </Modal.Window>
         </Modal>
         <button>Răspunde</button>

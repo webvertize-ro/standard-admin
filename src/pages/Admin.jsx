@@ -100,6 +100,7 @@ export default function Admin() {
               email={e.email}
               message={e.message}
               date={e.createdAt}
+              id={e._id}
             />
           ))}
         </div>

@@ -31,7 +31,8 @@ const StyledP = styled.p`
   text-align: center;
 `;
 
-function DeleteModalInner({ onCloseModal }) {
+function DeleteModalInner({ onCloseModal, id }) {
+  console.log('the id of the entry is: ', id);
   return (
     <StyledDeleteModalInner>
       <StyledH5>
