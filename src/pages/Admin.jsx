@@ -20,71 +20,71 @@ const StyledH2 = styled.h2`
 `;
 
 export default function Admin() {
-  // const [entries, setEntries] = useState([]);
+  const [entries, setEntries] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const entries = [
-    {
-      name: 'Ion Popescu',
-      email: 'ion@test.com',
-      message: 'Buna ziua!',
-      date: '21.02.2026',
-    },
-    {
-      name: 'Vasile Ionescu',
-      email: 'vasile@test.com',
-      message: 'Buna seara!',
-      date: '20.02.2026',
-    },
-  ];
+  // const entries = [
+  //   {
+  //     name: 'Ion Popescu',
+  //     email: 'ion@test.com',
+  //     message: 'Buna ziua!',
+  //     date: '21.02.2026',
+  //   },
+  //   {
+  //     name: 'Vasile Ionescu',
+  //     email: 'vasile@test.com',
+  //     message: 'Buna seara!',
+  //     date: '20.02.2026',
+  //   },
+  // ];
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
+  useEffect(() => {
+    const token = localStorage.getItem('token');
 
-  //   if (!token) {
-  //     window.location.href = '/';
-  //     return;
-  //   }
+    if (!token) {
+      window.location.href = '/';
+      return;
+    }
 
-  //   async function getData() {
-  //     try {
-  //       const res = await fetch('/api/submissions', {
-  //         headers: {
-  //           Authorization: 'Bearer ' + token,
-  //         },
-  //       });
+    async function getData() {
+      try {
+        const res = await fetch('/api/submissions', {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        });
 
-  //       if (!res.ok) {
-  //         setError('Error loading data');
-  //         return;
-  //       }
+        if (!res.ok) {
+          setError('Error loading data');
+          return;
+        }
 
-  //       const data = await res.json();
-  //       setEntries(data);
-  //     } catch (error) {
-  //       setError('Error loading data');
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
+        const data = await res.json();
+        setEntries(data);
+      } catch (error) {
+        setError('Error loading data');
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  //   getData();
-  // }, []);
+    getData();
+  }, []);
 
   // Show spinner while loading
-  // if (loading) {
-  //   return (
-  //     <div
-  //       className="d-flex justify-content-center align-items-center"
-  //       style={{ height: '100vh' }}
-  //     >
-  //       <div className="spinner-border" role="status">
-  //         <span className="visually-hidden">Loading...</span>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ height: '100vh' }}
+      >
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <StyledAdmin>
