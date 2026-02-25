@@ -52,6 +52,8 @@ const LoginButton = styled.button`
   border-radius: 0.5rem;
   display: flex;
   justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
   width: 100%;
   text-transform: uppercase;
   transition: all 0.3s ease-in-out;
@@ -73,11 +75,11 @@ const StyledForm = styled.form`
 `;
 
 const StyledInput = styled.input`
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 
   &:focus {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
 `;
@@ -127,7 +129,7 @@ function Login() {
             <StyledInput
               value={username}
               onChange={(e) => setU(e.target.value)}
-              className="form-control"
+              className="form-control text-light"
             />
           </div>
           <div className="mb-4">
@@ -138,7 +140,7 @@ function Login() {
               type="password"
               value={password}
               onChange={(e) => setP(e.target.value)}
-              className="form-control"
+              className="form-control text-light"
             />
           </div>
 
