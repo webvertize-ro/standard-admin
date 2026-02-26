@@ -70,6 +70,10 @@ export default function Admin() {
     }
 
     getData();
+
+    const interval = setInterval(getData, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   // Show spinner while loading
