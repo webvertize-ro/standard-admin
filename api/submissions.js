@@ -28,22 +28,7 @@ export default async function handler(req, res) {
     const changeStream = collection.watch();
 
     changeStream.on('change', async () => {
-      entries = await collection
-        .find(
-          {},
-          {
-            projection: {
-              name: 1,
-              email: 1,
-              message: 1,
-              ip: 1,
-              createdAt: 1,
-              _id: 1,
-            },
-          },
-        )
-        .sort({ createdAt: -1 })
-        .toArray();
+      entries = await collection.find().toArray();
     });
     return res.status(200).json(entries);
   } catch (err) {
