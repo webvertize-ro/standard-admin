@@ -52,7 +52,7 @@ export default function Admin() {
       try {
         const res = await fetch('/api/submissions', {
           headers: {
-            Authorization: 'Bearer' + token,
+            authorization: 'Bearer' + token,
           },
         });
 
