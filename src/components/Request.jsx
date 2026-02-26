@@ -81,7 +81,7 @@ function Request({ name, email, message, date, id }) {
           <span>
             <strong>Dată: </strong>
           </span>
-          <span>{date}</span>
+          <span>{formattedDate}</span>
         </StyledLi>
       </StyledUl>
       <ActionButtons>
