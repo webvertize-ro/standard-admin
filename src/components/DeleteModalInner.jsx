@@ -39,6 +39,10 @@ function DeleteModalInner({ onCloseModal, id }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id }),
       });
+
+      if (res.status === 204) {
+        console.log('the entry was indeed deleted');
+      }
     } catch (error) {
       console.error(error);
     }
