@@ -23,13 +23,24 @@ export default async function handler(req, res) {
     await client.connect();
     const db = client.db('PacheteWebvertize');
     const collection = db.collection('PachetulWebvertizeStandard');
-    let entries;
-    // Watching for changes
-    const changeStream = collection.watch();
 
-    changeStream.on('change', async () => {
-      entries = await collection.find().toArray();
-    });
+    const entries = await collection
+      .find(
+        {},
+        {
+          projection: {
+            name: 1,
+            email: 1,
+            message: 1,
+            ip: 1,
+            createdAt: 1,
+            _id: 1,
+          },
+        },
+      )
+      .sort({ createdAt: -1 })
+      .toArray();
+
     return res.status(200).json(entries);
   } catch (err) {
     return res.status(500).json({ error: 'DB error', details: err.message });
