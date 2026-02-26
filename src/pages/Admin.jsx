@@ -93,7 +93,6 @@ export default function Admin() {
 
   return (
     <StyledAdmin>
-      <Navigation />
       <Container className="container">
         <StyledH2>Solicitări trimise</StyledH2>
         {error && <p>{error}</p>}
