@@ -39,6 +39,7 @@ export default function Admin() {
   //   },
   // ];
 
+  // Fetching entries from the database with polling
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -51,7 +52,7 @@ export default function Admin() {
       try {
         const res = await fetch('/api/submissions', {
           headers: {
-            Authorization: 'Bearer ' + token,
+            Authorization: 'Bearer' + token,
           },
         });
 

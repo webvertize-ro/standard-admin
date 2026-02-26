@@ -42,7 +42,7 @@ export default async function handler(req, res) {
       .toArray();
 
     return res.status(200).json(entries);
-  } catch (err) {
-    return res.status(500).json({ error: 'DB error', details: err.message });
+  } catch (error) {
+    return res.status(500).json({ error: 'DB error', details: error.message });
   }
 }
