@@ -72,7 +72,7 @@ export default function Admin() {
 
     getData();
 
-    const interval = setInterval(getData, 3000);
+    const interval = setInterval(getData, 1500);
 
     return () => clearInterval(interval);
   }, []);
