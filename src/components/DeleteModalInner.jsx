@@ -58,7 +58,13 @@ function DeleteModalInner({ onCloseModal, id }) {
         ireversibilă.
       </StyledP>
       <ActionButtons>
-        <StyledButton action="delete" onClick={() => deleteEntry(id)}>
+        <StyledButton
+          action="delete"
+          onClick={() => {
+            deleteEntry(id);
+            onCloseModal?.();
+          }}
+        >
           Șterge
         </StyledButton>
         <StyledButton action="cancel" onClick={() => onCloseModal?.()}>
