@@ -46,15 +46,15 @@ const StyledButton = styled.button`
 `;
 
 function Request({ name, email, message, date, id }) {
-  // const formattedDate = new Intl.DateTimeFormat('ro-RO', {
-  //   timeZone: 'Europe/Bucharest',
-  //   year: 'numeric',
-  //   month: '2-digit',
-  //   day: '2-digit',
-  //   hour: '2-digit',
-  //   minute: '2-digit',
-  //   second: '2-digit',
-  // }).format(new Date(date));
+  const formattedDate = new Intl.DateTimeFormat('ro-RO', {
+    timeZone: 'Europe/Bucharest',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).format(new Date(date));
 
   return (
     <StyledRequest className="mb-3">
