@@ -119,7 +119,6 @@ function Login() {
       <Text>
         <div className="mb-3">
           <Logo />
-          <h2>Pachetul standard</h2>
         </div>
         <StyledH2 className="mb-4">Admin Login</StyledH2>
         <StyledForm onSubmit={handleSubmit}>
