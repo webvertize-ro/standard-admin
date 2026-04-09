@@ -32,26 +32,7 @@ const StyledP = styled.p`
 `;
 
 function DeleteModalInner({ onCloseModal, id, onDelete }) {
-  async function deleteEntry(id) {
-    try {
-      const res = await fetch('/api/deleteEntry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id }),
-      });
-
-      if (res.ok) {
-        onDelete(id);
-      }
-
-      if (res.status === 204) {
-        console.log('the entry was indeed deleted');
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
+  console.log('id in DeleteModal: ', id);
   return (
     <StyledDeleteModalInner>
       <StyledH5>
@@ -65,7 +46,7 @@ function DeleteModalInner({ onCloseModal, id, onDelete }) {
         <StyledButton
           action="delete"
           onClick={() => {
-            deleteEntry(id);
+            onDelete(id);
             onCloseModal?.();
           }}
         >

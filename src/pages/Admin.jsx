@@ -2,6 +2,13 @@ import { useEffect, useState } from 'react';
 import Navigation from '../components/Navigation';
 import Request from '../components/Request';
 import styled from 'styled-components';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  deleteSubmission,
+  getSubmissions,
+  subscribeToMessages,
+} from '../services/apiSubmissions';
+import supabase from '../services/supabase';
 
 const StyledAdmin = styled.div`
   height: 100vh;
@@ -20,69 +27,46 @@ const StyledH2 = styled.h2`
 `;
 
 export default function Admin() {
-  const [entries, setEntries] = useState([]);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  // const entries = [
-  //   {
-  //     name: 'Ion Popescu',
-  //     email: 'ion@test.com',
-  //     message: 'Buna ziua!',
-  //     createdAt: '2026-02-26T08:27:38.886+00:00',
-  //   },
-  //   {
-  //     name: 'Vasile Ionescu',
-  //     email: 'vasile@test.com',
-  //     message: 'Buna seara!',
-  //     createdAt: '2026-02-26T08:27:54.590+00:00',
-  //   },
-  // ];
+  // Retrieve the submissions initially with React Query
+  const {
+    data: submissions = [],
+    isPending,
+    error: errorGetSubmissions,
+  } = useQuery({
+    queryKey: ['submissions'],
+    queryFn: () => getSubmissions(),
+  });
 
-  function handleDelete(id) {
-    setEntries((prev) => prev.filter((e) => e._id !== id));
-  }
+  // Delete function
+  const { mutate: deleteSub, isPending: isLoadingDelete } = useMutation({
+    mutationFn: deleteSubmission,
+    onError: (error) => console.error(error),
+  });
 
-  // Fetching entries from the database with polling
+  // Live-subscription for submissions
   useEffect(() => {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      window.location.href = '/';
-      return;
-    }
-
-    async function getData() {
-      try {
-        const res = await fetch('/api/submissions', {
-          headers: {
-            Authorization: 'Bearer ' + token,
-          },
+    const channel = subscribeToMessages((payload) => {
+      if (payload.eventType === 'INSERT') {
+        queryClient.setQueryData(['submissions'], (old = []) => {
+          return [...old, payload.new];
         });
-
-        if (!res.ok) {
-          setError('Error loading data');
-          return;
-        }
-
-        const data = await res.json();
-        setEntries(data);
-      } catch (error) {
-        setError('Error loading data');
-      } finally {
-        setLoading(false);
       }
-    }
 
-    getData();
+      if (payload.eventType === 'DELETE') {
+        queryClient.setQueryData(['submissions'], (old) =>
+          old.filter((s) => s.id !== payload.old.id),
+        );
+      }
+    });
 
-    const interval = setInterval(getData, 1500);
-
-    return () => clearInterval(interval);
-  }, []);
+    // Cleanup on unmount
+    return () => supabase.removeChannel(channel);
+  }, [queryClient, deleteSub]);
 
   // Show spinner while loading
-  if (loading) {
+  if (isPending) {
     return (
       <div
         className="d-flex justify-content-center align-items-center"
@@ -98,18 +82,17 @@ export default function Admin() {
   return (
     <StyledAdmin>
       <Container className="container">
-        <StyledH2>Solicitări trimise</StyledH2>
-        {error && <p>{error}</p>}
+        <StyledH2>Solicitări primite</StyledH2>
+
         <div className="container">
-          {console.log('database entries: ', entries)}
-          {entries.map((e) => (
+          {submissions.map((e) => (
             <Request
               name={e.name}
               email={e.email}
               message={e.message}
-              date={e.createdAt}
-              id={e._id}
-              onDelete={handleDelete}
+              date={e.created_at}
+              id={e.id}
+              onDelete={deleteSub}
             />
           ))}
         </div>

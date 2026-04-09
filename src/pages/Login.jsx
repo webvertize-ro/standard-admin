@@ -3,6 +3,11 @@ import Logo from '../components/Logo';
 import styled from 'styled-components';
 import LoadingSpinner from '../components/LoadingSpinner';
 import loginBg from '../assets/login_background.jpg';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { logUserIn } from '../services/apiAuth';
+import toast from 'react-hot-toast';
 
 const StyledLogin = styled.div`
   height: 100vh;
@@ -85,33 +90,23 @@ const StyledInput = styled.input`
 `;
 
 function Login() {
-  const [username, setU] = useState('');
-  const [password, setP] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const { register, reset, handleSubmit } = useForm();
+  const navigate = useNavigate();
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+  const queryClient = useQueryClient();
+  const { mutate: login, isPending } = useMutation({
+    mutationFn: logUserIn,
+    onSuccess: (data) => {
+      queryClient.setQueryData(['session'], data.user);
+      navigate('/admin');
+    },
+    onError: (error) => {
+      toast.error(error.message || 'Invalid email or password');
+    },
+  });
 
-    const res = await fetch('/api/login', {
-      method: 'POST',
-
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
-    });
-
-    const data = await res.json();
-    setLoading(false);
-
-    if (!res.ok) {
-      setError(data.error);
-      return;
-    }
-
-    localStorage.setItem('token', data.token);
-    window.location.href = '/admin';
+  function handleLogin(data) {
+    login(data);
   }
 
   return (
@@ -121,15 +116,16 @@ function Login() {
           <Logo />
         </div>
         <StyledH2 className="mb-4">Admin Login</StyledH2>
-        <StyledForm onSubmit={handleSubmit}>
+        <StyledForm onSubmit={handleSubmit(handleLogin)}>
           <div className="mb-4">
-            <label htmlFor="username" className="form-label">
-              Username
+            <label htmlFor="email" className="form-label">
+              Email
             </label>
             <StyledInput
-              value={username}
-              onChange={(e) => setU(e.target.value)}
+              type="email"
+              name="email"
               className="form-control text-light"
+              {...register('email')}
             />
           </div>
           <div className="mb-4">
@@ -138,18 +134,17 @@ function Login() {
             </label>
             <StyledInput
               type="password"
-              value={password}
-              onChange={(e) => setP(e.target.value)}
-              className="form-control text-light"
+              name="password"
+              className="form-control"
+              {...register('password')}
             />
           </div>
 
           <LoginButton type="submit">
-            {loading && <LoadingSpinner />}
+            {isPending && <LoadingSpinner />}
             Login
           </LoginButton>
         </StyledForm>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
       </Text>
     </StyledLogin>
   );
