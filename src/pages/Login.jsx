@@ -98,7 +98,7 @@ function Login() {
     mutationFn: logUserIn,
     onSuccess: (data) => {
       queryClient.setQueryData(['session'], data.user);
-      navigate('/admin');
+      navigate('/requests');
     },
     onError: (error) => {
       toast.error(error.message || 'Invalid email or password');
