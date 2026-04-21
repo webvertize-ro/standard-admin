@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Navigation from '../components/Navigation';
 import Request from '../components/Request';
 import styled from 'styled-components';
@@ -9,7 +9,6 @@ import {
   subscribeToMessages,
 } from '../services/apiSubmissions';
 import supabase from '../services/supabase';
-import { useAuth } from '../context/AuthContext';
 
 const StyledAdmin = styled.div`
   height: 100vh;
@@ -28,8 +27,6 @@ const StyledH2 = styled.h2`
 `;
 
 export default function Requests() {
-  const { user } = useAuth();
-
   const queryClient = useQueryClient();
 
   // Retrieve the submissions initially with React Query

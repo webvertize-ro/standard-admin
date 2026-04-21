@@ -144,7 +144,7 @@ function Admin() {
   }
 
   const [editingField, setEditingField] = useState(null);
-
+  console.log('editingField: ', editingField);
   if (isLoading) return <LoadingSpinner />;
 
   const pages = Object.entries(grouped).map(([page]) => page);

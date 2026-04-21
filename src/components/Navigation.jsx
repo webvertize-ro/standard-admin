@@ -69,7 +69,7 @@ function Navigation() {
 
   return (
     <NavContainer>
-      <StyledNav className="navbar navbar-expand-lg">
+      <StyledNav className="navbar navbar-expand-lg fixed-top">
         <div className="container h-100">
           <a className="navbar-brand" href="#">
             <Logo />
