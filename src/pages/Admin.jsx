@@ -114,6 +114,10 @@ const Content = styled.div`
   overflow-wrap: break-word;
 `;
 
+const StyledImg = styled.img`
+  max-width: 80px;
+`;
+
 function Admin() {
   const { grouped, isLoading } = useContent();
   const [selectedPage, setSelectedPage] = useState('global');
@@ -187,9 +191,14 @@ function Admin() {
                                 <FieldContent>
                                   <Label>{field.label}: </Label>
                                   <Content>
-                                    {field.content_type === 'image_url'
-                                      ? '[ imagine ]'
-                                      : field.value}
+                                    {field.content_type === 'image_url' ? (
+                                      <StyledImg
+                                        src={field.value}
+                                        alt={field.label}
+                                      />
+                                    ) : (
+                                      field.value
+                                    )}
                                   </Content>
                                 </FieldContent>
                                 <EditButton
