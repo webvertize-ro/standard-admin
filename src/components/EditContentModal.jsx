@@ -1,3 +1,4 @@
+// components/EditContentModal.jsx
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateTextContent, updateImageContent } from '../services/apiContent';
@@ -141,9 +142,20 @@ const SaveBtn = styled.button`
 function EditContentModal({ field, onClose }) {
   const { websiteId } = useAuth();
   const queryClient = useQueryClient();
-  const [textValue, setTextValue] = useState(field.value);
+  // parse the existing JSON value for social_link fields
+  const parsedSocial =
+    field.content_type === 'social_link'
+      ? JSON.parse(field.value || '{"platform": "facebook", "url": ""}')
+      : null;
+
+  const [textValue, setTextValue] = useState(field?.value);
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  // state for social platform and URL (of that platform)
+  const [socialPlatform, setSocialPlatform] = useState(
+    parsedSocial?.platform || 'facebook',
+  );
+  const [socialUrl, setSocialUrl] = useState(parsedSocial?.url || '');
 
   function handleFileSelect(file) {
     const url = URL.createObjectURL(file);
@@ -153,7 +165,7 @@ function EditContentModal({ field, onClose }) {
 
   const { mutate: saveContent, isPending } = useMutation({
     mutationFn: (variables) => {
-      if (field.content_type === 'image_url') {
+      if (field?.content_type === 'image_url') {
         return updateImageContent(variables);
       }
       return updateTextContent(variables);
@@ -170,13 +182,33 @@ function EditContentModal({ field, onClose }) {
   });
 
   function handleSave() {
-    if (field.content_type === 'image_url') {
+    if (field?.content_type === 'image_url') {
       if (!imageFile) return toast.error('Selectează o imagine');
-      saveContent({ id: field.id, websiteId, key: field.key, file: imageFile });
+      saveContent({
+        id: field?.id,
+        websiteId,
+        key: field?.key,
+        file: imageFile,
+      });
+    } else if (field.content_type === 'social_link') {
+      // serialize back to JSON string before saving
+      const value = JSON.stringify({
+        platform: socialPlatform,
+        url: socialUrl,
+      });
+      saveContent({ id: field.id, value });
     } else {
-      saveContent({ id: field.id, value: textValue });
+      saveContent({ id: field?.id, value: textValue });
     }
   }
+
+  const platformOptions = [
+    { value: 'facebook', label: 'Facebook' },
+    { value: 'instagram', label: 'Instagram' },
+    { value: 'youtube', label: 'YouTube' },
+    { value: 'linkedin', label: 'LinkedIn' },
+    { value: 'tiktok', label: 'TikTok' },
+  ];
 
   const ref = useOutsideClick(field ? onClose : {});
 
@@ -187,19 +219,41 @@ function EditContentModal({ field, onClose }) {
           <CloseBtn onClick={() => onClose()}>
             <FontAwesomeIcon icon={faX} />
           </CloseBtn>
-          <ModalTitle>{field.label}</ModalTitle>
+          <ModalTitle>{field?.label}</ModalTitle>
         </ModalTop>
         <StyledP>
           <strong>Conținutul editat: </strong>
-          {field.page} › {field.section}
+          {field?.page} › {field?.section}
         </StyledP>
 
-        {field.content_type === 'text' ? (
+        {field?.content_type === 'text' ? (
           <StyledTextarea
             value={textValue}
             onChange={(e) => setTextValue(e.target.value)}
             rows={4}
           />
+        ) : field?.content_type === 'social_link' ? (
+          <div>
+            <label>Platformă</label>
+            <select
+              value={socialPlatform}
+              onChange={(e) => setSocialPlatform(e.target.value)}
+            >
+              {platformOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+
+            <label>Link</label>
+            <input
+              type="url"
+              value={socialUrl}
+              onChange={(e) => setSocialUrl(e.target.value)}
+              placeholder="https://facebook.com/pagina-ta"
+            />
+          </div>
         ) : (
           <div>
             <ImageChange className="mb-2">
@@ -207,8 +261,8 @@ function EditContentModal({ field, onClose }) {
                 <div className="text-dark">Imaginea actuala: </div>
 
                 <StyledImg
-                  src={field.value}
-                  alt={field.label}
+                  src={field?.value}
+                  alt={field?.label}
                   className="img-fluid"
                 />
               </CurrentImage>
