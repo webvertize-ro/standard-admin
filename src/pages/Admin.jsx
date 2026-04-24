@@ -4,6 +4,8 @@ import { useContent } from '../hooks/useContent';
 import EditContentModal from '../components/EditContentModal';
 import LoadingSpinner from '../components/LoadingSpinner';
 import styled from 'styled-components';
+import { c } from '../utils/content';
+import { pageLabels, sectionLabels } from '../utils/labels';
 
 const SpinnerContainer = styled.div`
   height: 100vh;
@@ -164,7 +166,7 @@ function Admin() {
                 onClick={() => handleSelectedTab(p)}
                 selected={p === selectedPage}
               >
-                {p}
+                {pageLabels[p]}
               </IndividualTab>
             </>
           ))}
@@ -182,7 +184,7 @@ function Admin() {
                       {Object.entries(sections).map(([section, fields]) => (
                         <Section key={section} className="mb-2">
                           <SectionTitle>
-                            Secțiunea: <strong>{section}</strong>
+                            Secțiunea: <strong>{sectionLabels[section]}</strong>
                           </SectionTitle>
                           {/* level 3 - iterating over individual fields within each section */}
                           <FieldsContainer>
