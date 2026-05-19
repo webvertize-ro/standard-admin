@@ -105,7 +105,11 @@ function Request({ name, email, message, date, id, onDelete }) {
           <Modal.Open opens="reply-modal">
             <StyledButton>Răspunde</StyledButton>
           </Modal.Open>
-          <Modal.Window name="reply-modal" title="Confirmare acțiune">
+          <Modal.Window
+            name="reply-modal"
+            title="Confirmare acțiune"
+            size="large"
+          >
             <ReplyModalInner email={email} name={name} />
           </Modal.Window>
         </Modal>
