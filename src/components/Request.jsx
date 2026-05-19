@@ -3,6 +3,8 @@ import Modal from "./Modal";
 import DeleteModalInner from "./DeleteModalInner";
 import ReplyModalInner from "./ReplyModalInner";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faReply } from "@fortawesome/free-solid-svg-icons";
 
 const StyledRequest = styled.div`
   display: flex;
@@ -45,6 +47,18 @@ const StyledButton = styled.button`
   border-radius: 0.5rem;
   color: #fff;
   background-color: #88304e;
+`;
+
+const ReplyButton = styled.button`
+  border: none;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  color: #fff;
+  background-color: #408a71;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
 `;
 
 function Request({ name, email, message, date, id, onDelete }) {
@@ -103,7 +117,12 @@ function Request({ name, email, message, date, id, onDelete }) {
         {/* Reply to Email Button */}
         <Modal>
           <Modal.Open opens="reply-modal">
-            <StyledButton>Răspunde</StyledButton>
+            <ReplyButton>
+              <div>
+                <FontAwesomeIcon icon={faReply} />
+              </div>
+              <div>Răspunde</div>
+            </ReplyButton>
           </Modal.Open>
           <Modal.Window
             name="reply-modal"
