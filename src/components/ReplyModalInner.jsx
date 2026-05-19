@@ -36,7 +36,7 @@ function ReplyModalInner({ email, name, onCloseModal }) {
         <textarea {...register("message")} rows={8} />
 
         <div>
-          <button type="button" onClick={onClose} disabled={isPending}>
+          <button type="button" onClick={onCloseModal} disabled={isPending}>
             Anuleaza
           </button>
           <button type="submit" disabled={isPending}>
