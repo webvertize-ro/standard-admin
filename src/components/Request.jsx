@@ -1,6 +1,8 @@
-import styled from 'styled-components';
-import Modal from './Modal';
-import DeleteModalInner from './DeleteModalInner';
+import styled from "styled-components";
+import Modal from "./Modal";
+import DeleteModalInner from "./DeleteModalInner";
+import ReplyModalInner from "./ReplyModalInner";
+import { useState } from "react";
 
 const StyledRequest = styled.div`
   display: flex;
@@ -46,20 +48,22 @@ const StyledButton = styled.button`
 `;
 
 function Request({ name, email, message, date, id, onDelete }) {
-  const formattedDate = new Intl.DateTimeFormat('ro-RO', {
-    timeZone: 'Europe/Bucharest',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
+  const formattedDate = new Intl.DateTimeFormat("ro-RO", {
+    timeZone: "Europe/Bucharest",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
   }).format(new Date(date));
+
+  const [replyTo, setReplyTo] = useState(null);
 
   return (
     <StyledRequest className="mb-3">
       <StyledUl>
-        <StyledLi className="list-group-item">
+        <StyledLi className="list-group-item" onClick={() => setReplyTo}>
           <span>
             <strong>Nume: </strong>
           </span>
@@ -97,7 +101,16 @@ function Request({ name, email, message, date, id, onDelete }) {
             <DeleteModalInner id={id} onDelete={onDelete} />
           </Modal.Window>
         </Modal>
-        {/* <button>Răspunde</button> */}
+
+        {/* Reply to Email Button */}
+        <Modal>
+          <Modal.Open opens="reply-modal">
+            <StyledButton>Răspunde</StyledButton>
+          </Modal.Open>
+          <Modal.Window name="reply-modal" title="Confirmare acțiune">
+            <ReplyModalInner email={email} name={name} />
+          </Modal.Window>
+        </Modal>
       </ActionButtons>
     </StyledRequest>
   );

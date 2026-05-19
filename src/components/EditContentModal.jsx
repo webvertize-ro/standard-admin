@@ -1,13 +1,13 @@
 // components/EditContentModal.jsx
-import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateTextContent, updateImageContent } from '../services/apiContent';
-import { useAuth } from '../context/AuthContext';
-import toast from 'react-hot-toast';
-import styled from 'styled-components';
-import { useOutsideClick } from '../hooks/useOutsideClick';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faX, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { updateTextContent, updateImageContent } from "../services/apiContent";
+import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
+import styled from "styled-components";
+import { useOutsideClick } from "../hooks/useOutsideClick";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUpload, faX, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const Overlay = styled.div`
   position: fixed;
@@ -144,7 +144,7 @@ function EditContentModal({ field, onClose }) {
   const queryClient = useQueryClient();
   // parse the existing JSON value for social_link fields
   const parsedSocial =
-    field.content_type === 'social_link'
+    field.content_type === "social_link"
       ? JSON.parse(field.value || '{"platform": "facebook", "url": ""}')
       : null;
 
@@ -153,9 +153,9 @@ function EditContentModal({ field, onClose }) {
   const [previewUrl, setPreviewUrl] = useState(null);
   // state for social platform and URL (of that platform)
   const [socialPlatform, setSocialPlatform] = useState(
-    parsedSocial?.platform || 'facebook',
+    parsedSocial?.platform || "facebook",
   );
-  const [socialUrl, setSocialUrl] = useState(parsedSocial?.url || '');
+  const [socialUrl, setSocialUrl] = useState(parsedSocial?.url || "");
 
   function handleFileSelect(file) {
     const url = URL.createObjectURL(file);
@@ -165,32 +165,32 @@ function EditContentModal({ field, onClose }) {
 
   const { mutate: saveContent, isPending } = useMutation({
     mutationFn: (variables) => {
-      if (field?.content_type === 'image_url') {
+      if (field?.content_type === "image_url") {
         return updateImageContent(variables);
       }
       return updateTextContent(variables);
     },
     onSuccess: () => {
       // invalidate the content query so the list refreshes
-      queryClient.invalidateQueries({ queryKey: ['content', websiteId] });
-      toast.success('Conținut actualizat!');
+      queryClient.invalidateQueries({ queryKey: ["content", websiteId] });
+      toast.success("Conținut actualizat!");
       onClose();
     },
     onError: (error) => {
-      toast.error(error.message || 'Eroare la actualizare');
+      toast.error(error.message || "Eroare la actualizare");
     },
   });
 
   function handleSave() {
-    if (field?.content_type === 'image_url') {
-      if (!imageFile) return toast.error('Selectează o imagine');
+    if (field?.content_type === "image_url") {
+      if (!imageFile) return toast.error("Selectează o imagine");
       saveContent({
         id: field?.id,
         websiteId,
         key: field?.key,
         file: imageFile,
       });
-    } else if (field.content_type === 'social_link') {
+    } else if (field.content_type === "social_link") {
       // serialize back to JSON string before saving
       const value = JSON.stringify({
         platform: socialPlatform,
@@ -203,11 +203,11 @@ function EditContentModal({ field, onClose }) {
   }
 
   const platformOptions = [
-    { value: 'facebook', label: 'Facebook' },
-    { value: 'instagram', label: 'Instagram' },
-    { value: 'youtube', label: 'YouTube' },
-    { value: 'linkedin', label: 'LinkedIn' },
-    { value: 'tiktok', label: 'TikTok' },
+    { value: "facebook", label: "Facebook" },
+    { value: "instagram", label: "Instagram" },
+    { value: "youtube", label: "YouTube" },
+    { value: "linkedin", label: "LinkedIn" },
+    { value: "tiktok", label: "TikTok" },
   ];
 
   const ref = useOutsideClick(field ? onClose : {});
@@ -226,13 +226,13 @@ function EditContentModal({ field, onClose }) {
           {field?.page} › {field?.section}
         </StyledP>
 
-        {field?.content_type === 'text' ? (
+        {field?.content_type === "text" ? (
           <StyledTextarea
             value={textValue}
             onChange={(e) => setTextValue(e.target.value)}
             rows={4}
           />
-        ) : field?.content_type === 'social_link' ? (
+        ) : field?.content_type === "social_link" ? (
           <div>
             <label>Platformă</label>
             <select
@@ -270,9 +270,9 @@ function EditContentModal({ field, onClose }) {
                 <NewImage>
                   <div className="d-flex justify-content-between ">
                     <NewImageText className="text-dark">
-                      Noua imagine:{' '}
+                      Noua imagine:{" "}
                     </NewImageText>
-                    <DismissButton onClick={() => setPreviewUrl('')}>
+                    <DismissButton onClick={() => setPreviewUrl("")}>
                       <StyledFontAwesomeIcon icon={faXmark} />
                     </DismissButton>
                   </div>
@@ -307,7 +307,7 @@ function EditContentModal({ field, onClose }) {
             Anulează
           </CancelBtn>
           <SaveBtn onClick={handleSave} disabled={isPending}>
-            {isPending ? 'Se salvează...' : 'Salvează'}
+            {isPending ? "Se salvează..." : "Salvează"}
           </SaveBtn>
         </ActionButtonsContainer>
       </Modal>

@@ -1,17 +1,17 @@
-import { useEffect } from 'react';
-import Navigation from '../components/Navigation';
-import Request from '../components/Request';
-import styled from 'styled-components';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from "react";
+import Navigation from "../components/Navigation";
+import Request from "../components/Request";
+import styled from "styled-components";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteSubmission,
   getSubmissions,
   subscribeToMessages,
-} from '../services/apiSubmissions';
-import supabase from '../services/supabase';
+} from "../services/apiSubmissions";
+import supabase from "../services/supabase";
 
 const StyledAdmin = styled.div`
-  height: 100vh;
+  padding-top: 5rem;
   background-color: rgba(54, 85, 104, 1);
   color: #fff;
 `;
@@ -35,7 +35,7 @@ export default function Requests() {
     isPending,
     error: errorGetSubmissions,
   } = useQuery({
-    queryKey: ['submissions'],
+    queryKey: ["submissions"],
     queryFn: () => getSubmissions(),
   });
 
@@ -48,14 +48,14 @@ export default function Requests() {
   // Live-subscription for submissions
   useEffect(() => {
     const channel = subscribeToMessages((payload) => {
-      if (payload.eventType === 'INSERT') {
-        queryClient.setQueryData(['submissions'], (old = []) => {
+      if (payload.eventType === "INSERT") {
+        queryClient.setQueryData(["submissions"], (old = []) => {
           return [...old, payload.new];
         });
       }
 
-      if (payload.eventType === 'DELETE') {
-        queryClient.setQueryData(['submissions'], (old) =>
+      if (payload.eventType === "DELETE") {
+        queryClient.setQueryData(["submissions"], (old) =>
           old.filter((s) => s.id !== payload.old.id),
         );
       }
@@ -70,7 +70,7 @@ export default function Requests() {
     return (
       <div
         className="d-flex justify-content-center align-items-center"
-        style={{ height: '100vh' }}
+        style={{ height: "100vh" }}
       >
         <div className="spinner-border" role="status">
           <span className="visually-hidden">Loading...</span>
