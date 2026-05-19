@@ -101,6 +101,7 @@ function Request({ name, email, message, date, id, onDelete }) {
         </StyledLi>
       </StyledUl>
       <ActionButtons>
+        {/* Delete Button */}
         <Modal>
           <Modal.Open opens="delete-confirmation">
             <StyledButton>Șterge</StyledButton>
@@ -113,7 +114,6 @@ function Request({ name, email, message, date, id, onDelete }) {
             <DeleteModalInner id={id} onDelete={onDelete} />
           </Modal.Window>
         </Modal>
-
         {/* Reply to Email Button */}
         <Modal>
           <Modal.Open opens="reply-modal">
