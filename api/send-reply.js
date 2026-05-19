@@ -27,7 +27,9 @@ export default async function handler(req, res) {
       to,
       subject,
       text: message,
-      html: `<div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+      html: `
+      
+      <div style="font-family: sans-serif; max-width: 600px;">
           <p>${message.replace(/\n/g, "<br/>")}</p>
           <hr/>
           <p style="color: #6b7280; font-size: 12px;">
