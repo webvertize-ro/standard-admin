@@ -58,12 +58,10 @@ function Request({ name, email, message, date, id, onDelete }) {
     second: "2-digit",
   }).format(new Date(date));
 
-  const [replyTo, setReplyTo] = useState(null);
-
   return (
     <StyledRequest className="mb-3">
       <StyledUl>
-        <StyledLi className="list-group-item" onClick={() => setReplyTo}>
+        <StyledLi className="list-group-item">
           <span>
             <strong>Nume: </strong>
           </span>

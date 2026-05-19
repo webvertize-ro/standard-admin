@@ -1,12 +1,12 @@
 import { useForm } from "react-hook-form";
 import { useReply } from "../hooks/useReply";
 
-function ReplyModalInner({ email, name, onClose }) {
+function ReplyModalInner({ email, name, onCloseModal }) {
   const { register, handleSubmit } = useForm({
     defaultValues: {
       to: email,
       subject: `Răspuns la solicitarea dumneavoastră`,
-      message: `Bună ziua, ${name},\n\n`,
+      message: `Bună ziua, ${name}, \n`,
     },
   });
 
@@ -14,7 +14,7 @@ function ReplyModalInner({ email, name, onClose }) {
 
   function onSubmit(data) {
     sendReply(data, {
-      onSuccess: () => close(),
+      onSuccess: () => onCloseModal(),
     });
   }
 
