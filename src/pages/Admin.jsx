@@ -1,11 +1,11 @@
 // pages/Admin.jsx
-import { useEffect, useState } from 'react';
-import { useContent } from '../hooks/useContent';
-import EditContentModal from '../components/EditContentModal';
-import LoadingSpinner from '../components/LoadingSpinner';
-import styled from 'styled-components';
-import { c } from '../utils/content';
-import { pageLabels, sectionLabels } from '../utils/labels';
+import { useEffect, useState } from "react";
+import { useContent } from "../hooks/useContent";
+import EditContentModal from "../components/EditContentModal";
+import LoadingSpinner from "../components/LoadingSpinner";
+import styled from "styled-components";
+import { c } from "../utils/content";
+import { pageLabels, sectionLabels } from "../utils/labels";
 
 const SpinnerContainer = styled.div`
   height: 100vh;
@@ -26,7 +26,7 @@ const Tabs = styled.div`
   display: flex;
   justify-content: center;
   gap: 1rem;
-  position: ${(props) => (props.isScrolled ? 'fixed' : 'absolute')};
+  position: ${(props) => (props.isScrolled ? "fixed" : "absolute")};
   top: 80px;
   left: 0;
   right: 0;
@@ -49,8 +49,8 @@ const IndividualTab = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${(props) => (props.selected ? '#fff' : 'lightgrey')};
-  color: ${(props) => (props.selected ? '#000' : '#fff')};
+  background-color: ${(props) => (props.selected ? "#fff" : "lightgrey")};
+  color: ${(props) => (props.selected ? "#000" : "#fff")};
 
   &:hover {
     cursor: pointer;
@@ -122,35 +122,37 @@ const StyledImg = styled.img`
 
 function Admin() {
   const { grouped, isLoading } = useContent();
-  const [selectedPage, setSelectedPage] = useState('global');
+  const [selectedPage, setSelectedPage] = useState("global");
   const [isScrolled, setIsScrolled] = useState(false);
 
+  console.log("grouped in Admin: ", grouped);
+
   useEffect(() => {
-    if (localStorage.getItem('page')) {
-      setSelectedPage(localStorage.getItem('page'));
+    if (localStorage.getItem("page")) {
+      setSelectedPage(localStorage.getItem("page"));
     }
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   function handleSelectedTab(page) {
-    if (localStorage.getItem('page')) {
-      setSelectedPage(localStorage.getItem('page'));
+    if (localStorage.getItem("page")) {
+      setSelectedPage(localStorage.getItem("page"));
     }
 
     setSelectedPage(page);
     // set the selected page in localStorage
-    localStorage.setItem('page', page);
+    localStorage.setItem("page", page);
   }
 
   const [editingField, setEditingField] = useState(null);
-  console.log('editingField: ', editingField);
+  console.log("editingField: ", editingField);
   if (isLoading) return <LoadingSpinner />;
 
   const pages = Object.entries(grouped).map(([page]) => page);
@@ -193,11 +195,37 @@ function Admin() {
                                 <FieldContent>
                                   <Label>{field.label}: </Label>
                                   <Content>
-                                    {field.content_type === 'image_url' ? (
+                                    {field.content_type === "image_url" ? (
                                       <StyledImg
                                         src={field.value}
                                         alt={field.label}
                                       />
+                                    ) : field.content_type === "pdf_url" ? (
+                                      field.value ? (
+                                        <a
+                                          href={field.value}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          style={{ color: "#fff" }}
+                                        >
+                                          Vizualizează PDF
+                                        </a>
+                                      ) : (
+                                        <span style={{ color: "#9ca3af" }}>
+                                          Niciun fișier încărcat
+                                        </span>
+                                      )
+                                    ) : field.content_type === "social_link" ? (
+                                      (() => {
+                                        try {
+                                          const parsed = JSON.parse(
+                                            field.value,
+                                          );
+                                          return `${parsed.platform} — ${parsed.url}`;
+                                        } catch {
+                                          return field.value;
+                                        }
+                                      })()
                                     ) : (
                                       field.value
                                     )}

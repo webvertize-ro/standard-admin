@@ -1,7 +1,11 @@
 // components/EditContentModal.jsx
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateTextContent, updateImageContent } from "../services/apiContent";
+import {
+  updateTextContent,
+  updateImageContent,
+  updateFileContent,
+} from "../services/apiContent";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import styled from "styled-components";
@@ -151,6 +155,8 @@ function EditContentModal({ field, onClose }) {
   const [textValue, setTextValue] = useState(field?.value);
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [pdfFile, setPdfFile] = useState(null);
+
   // state for social platform and URL (of that platform)
   const [socialPlatform, setSocialPlatform] = useState(
     parsedSocial?.platform || "facebook",
@@ -165,9 +171,10 @@ function EditContentModal({ field, onClose }) {
 
   const { mutate: saveContent, isPending } = useMutation({
     mutationFn: (variables) => {
-      if (field?.content_type === "image_url") {
+      if (field?.content_type === "image_url")
         return updateImageContent(variables);
-      }
+      if (field?.content_type === "pdf_url")
+        return updateFileContent(variables);
       return updateTextContent(variables);
     },
     onSuccess: () => {
@@ -190,6 +197,9 @@ function EditContentModal({ field, onClose }) {
         key: field?.key,
         file: imageFile,
       });
+    } else if (field?.content_type === "pdf_url") {
+      if (!pdfFile) return toast.error("Selecteză un fișier PDF");
+      saveContent({ id: field?.id, websiteId, key: field?.key, file: pdfFile });
     } else if (field.content_type === "social_link") {
       // serialize back to JSON string before saving
       const value = JSON.stringify({
@@ -253,6 +263,61 @@ function EditContentModal({ field, onClose }) {
               onChange={(e) => setSocialUrl(e.target.value)}
               placeholder="https://facebook.com/pagina-ta"
             />
+          </div>
+        ) : field?.content_type === "pdf_url" ? (
+          <div>
+            {field?.value && (
+              <div className="mb-2">
+                <div className="text-dark mb-1">Fișier actual:</div>
+                <a
+                  href={field.value}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ color: "#1b3c53", fontSize: "13px" }}
+                >
+                  Vizualizează PDF actual
+                </a>
+              </div>
+            )}
+
+            {pdfFile && (
+              <div
+                className="mb-2"
+                style={{ fontSize: "13px", color: "#285a48" }}
+              >
+                Fișier selectat: <strong>{pdfFile.name}</strong>
+                <button
+                  onClick={() => setPdfFile(null)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#dc2525",
+                    cursor: "pointer",
+                    marginLeft: "0.5rem",
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
+            <UploadButtonContainer>
+              <StyledLabel htmlFor="pdf-file">
+                <span>
+                  <FontAwesomeIcon icon={faUpload} />
+                </span>
+                <span>Încarcă PDF</span>
+              </StyledLabel>
+              <StyledInput
+                id="pdf-file"
+                type="file"
+                accept="application/pdf"
+                onChange={(e) => {
+                  setPdfFile(e.target.files[0]);
+                  e.target.value = null;
+                }}
+              />
+            </UploadButtonContainer>
           </div>
         ) : (
           <div>
