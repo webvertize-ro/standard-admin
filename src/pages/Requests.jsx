@@ -11,49 +11,69 @@ import {
 import supabase from "../services/supabase";
 
 const StyledAdmin = styled.div`
-  padding-top: 5rem;
-  background-color: rgba(54, 85, 104, 1);
   color: #fff;
+  min-height: calc(100vh - 64px - 41px);
 `;
 
 const Container = styled.div`
-  padding: 1.25rem 0;
+  padding: 2rem 0;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    padding: 1rem 0;
+  }
 `;
 
-const StyledH2 = styled.h2`
+const PageHeading = styled.h2`
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(126, 200, 176, 0.5);
   margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(126, 200, 176, 0.1);
+`;
+
+const SpinnerContainer = styled.div`
+  min-height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const EmptyState = styled.div`
+  text-align: center;
+  padding: 3rem 1rem;
+  color: rgba(126, 200, 176, 0.35);
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 `;
 
 export default function Requests() {
   const queryClient = useQueryClient();
 
-  // Retrieve the submissions initially with React Query
-  const {
-    data: submissions = [],
-    isPending,
-    error: errorGetSubmissions,
-  } = useQuery({
+  const { data: submissions = [], isPending } = useQuery({
     queryKey: ["submissions"],
     queryFn: () => getSubmissions(),
   });
 
-  // Delete function
-  const { mutate: deleteSub, isPending: isLoadingDelete } = useMutation({
+  const { mutate: deleteSub } = useMutation({
     mutationFn: deleteSubmission,
     onError: (error) => console.error(error),
   });
 
-  // Live-subscription for submissions
   useEffect(() => {
     const channel = subscribeToMessages((payload) => {
       if (payload.eventType === "INSERT") {
-        queryClient.setQueryData(["submissions"], (old = []) => {
-          return [...old, payload.new];
-        });
+        queryClient.setQueryData(["submissions"], (old = []) => [
+          ...old,
+          payload.new,
+        ]);
       }
-
       if (payload.eventType === "DELETE") {
         queryClient.setQueryData(["submissions"], (old) =>
           old.filter((s) => s.id !== payload.old.id),
@@ -61,32 +81,22 @@ export default function Requests() {
       }
     });
 
-    // Cleanup on unmount
     return () => supabase.removeChannel(channel);
-  }, [queryClient, deleteSub]);
-
-  // Show spinner while loading
-  if (isPending) {
-    return (
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{ height: "100vh" }}
-      >
-        <div className="spinner-border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      </div>
-    );
-  }
+  }, [queryClient]);
 
   return (
     <StyledAdmin>
       <Container className="container">
-        <StyledH2>Solicitări primite</StyledH2>
+        <PageHeading>Solicitări primite</PageHeading>
 
-        <div className="container">
-          {submissions.map((e) => (
+        {isPending ? (
+          <SpinnerContainer></SpinnerContainer>
+        ) : submissions.length === 0 ? (
+          <EmptyState>Nicio solicitare primită</EmptyState>
+        ) : (
+          submissions.map((e) => (
             <Request
+              key={e.id}
               name={e.name}
               email={e.email}
               message={e.message}
@@ -94,8 +104,8 @@ export default function Requests() {
               id={e.id}
               onDelete={deleteSub}
             />
-          ))}
-        </div>
+          ))
+        )}
       </Container>
     </StyledAdmin>
   );

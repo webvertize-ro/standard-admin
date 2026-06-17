@@ -1,107 +1,137 @@
-import { useState } from 'react';
-import Logo from '../components/Logo';
-import styled from 'styled-components';
-import LoadingSpinner from '../components/LoadingSpinner';
-import loginBg from '../assets/login_background.jpg';
-import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { logUserIn } from '../services/apiAuth';
-import toast from 'react-hot-toast';
+import Logo from "../components/Logo";
+import styled from "styled-components";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { logUserIn } from "../services/apiAuth";
+import toast from "react-hot-toast";
 
 const StyledLogin = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url(${(props) => props.bgImg});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  position: relative;
-  z-index: 90;
-
-  &:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
+  background: linear-gradient(160deg, #1a2e2a 0%, #243d38 100%);
+  padding: 1.5rem;
 `;
 
-const Text = styled.div`
-  position: absolute;
-  z-index: 100;
-  padding: 0.75rem;
-  color: #fff;
-  border: 1px solid lime;
-  /* glassmorphism effect */
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+const LoginCard = styled.div`
+  width: 100%;
+  max-width: 360px;
+  padding: 2rem 1.75rem;
+  background: rgba(26, 58, 50, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(126, 200, 176, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25);
 `;
 
-const LoginButton = styled.button`
-  background: rgba(31, 55, 69, 0.8);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: #fff;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
+const LogoWrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 0.25rem;
-  width: 100%;
-  text-transform: uppercase;
-  transition: all 0.3s ease-in-out;
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      background: rgba(31, 55, 69, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-    }
-  }
+  margin-bottom: 1.25rem;
 `;
 
 const StyledH2 = styled.h2`
   text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(126, 200, 176, 0.6);
+  margin-bottom: 1.75rem;
 `;
 
 const StyledForm = styled.form`
-  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+`;
+
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+`;
+
+const FormLabel = styled.label`
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(126, 200, 176, 0.45);
 `;
 
 const StyledInput = styled.input`
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(126, 200, 176, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 0.9rem;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+
+  &::placeholder {
+    color: rgba(126, 200, 176, 0.25);
+  }
 
   &:focus {
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    outline: none;
+    border-color: rgba(126, 200, 176, 0.5);
+    background: rgba(255, 255, 255, 0.09);
+  }
+`;
+
+const LoginButton = styled.button`
+  margin-top: 0.5rem;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(126, 200, 176, 0.4);
+  background: rgba(126, 200, 176, 0.14);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba(126, 200, 176, 0.22);
+    border-color: rgba(126, 200, 176, 0.6);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 `;
 
 function Login() {
-  const { register, reset, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
-
   const queryClient = useQueryClient();
+
   const { mutate: login, isPending } = useMutation({
     mutationFn: logUserIn,
     onSuccess: (data) => {
-      queryClient.setQueryData(['session'], data.user);
-      navigate('/requests');
+      queryClient.setQueryData(["session"], data.user);
+      navigate("/requests");
     },
     onError: (error) => {
-      toast.error(error.message || 'Invalid email or password');
+      toast.error(error.message || "Invalid email or password");
     },
   });
 
@@ -110,42 +140,33 @@ function Login() {
   }
 
   return (
-    <StyledLogin bgImg={loginBg}>
-      <Text>
-        <div className="mb-3">
+    <StyledLogin>
+      <LoginCard>
+        <LogoWrapper>
           <Logo />
-        </div>
-        <StyledH2 className="mb-4">Admin Login</StyledH2>
-        <StyledForm onSubmit={handleSubmit(handleLogin)}>
-          <div className="mb-4">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
-            <StyledInput
-              type="email"
-              name="email"
-              className="form-control text-light"
-              {...register('email')}
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <StyledInput
-              type="password"
-              name="password"
-              className="form-control"
-              {...register('password')}
-            />
-          </div>
+        </LogoWrapper>
+        <StyledH2>Admin Login</StyledH2>
 
-          <LoginButton type="submit">
-            {isPending && <LoadingSpinner />}
-            Login
+        <StyledForm onSubmit={handleSubmit(handleLogin)}>
+          <FormGroup>
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <StyledInput id="email" type="email" {...register("email")} />
+          </FormGroup>
+
+          <FormGroup>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <StyledInput
+              id="password"
+              type="password"
+              {...register("password")}
+            />
+          </FormGroup>
+
+          <LoginButton type="submit" disabled={isPending}>
+            {isPending ? <LoadingSpinner /> : "Login"}
           </LoginButton>
         </StyledForm>
-      </Text>
+      </LoginCard>
     </StyledLogin>
   );
 }
